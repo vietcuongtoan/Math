@@ -1,0 +1,26 @@
+name: Auto Commit
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # 1h chiều Việt Nam mỗi ngày
+  workflow_dispatch:
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update timestamp
+        run: echo "Auto commit at $(date)" >> log.txt
+
+      - name: Setup Git config
+        run: |
+          git config user.name "vietcuongtoan"
+          git config user.email "buivietcuongtoan@gmail.com"
+
+      - name: Commit and push changes
+        run: |
+          git add .
+          git commit -m "Auto commit on $(date)" || echo "No changes to commit"
+          git push
